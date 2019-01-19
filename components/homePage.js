@@ -4,7 +4,9 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { TabNavigator } from "react-navigation";
-var coordinates=[{latitude:'38.4710',longitude:'27.2177'},{latitude:'38.5184',longitude:'27.1382'},{latitude:'40.9769',longitude:'29.0625'}]
+import  GlobalStore  from './globalStore';
+
+
 
 export default class HomePage extends Component{
   static navigationOptions = {
@@ -14,8 +16,8 @@ export default class HomePage extends Component{
     super(props);
 
     this.state = {
-      latitude: 38.41885,
-      longitude: 27.12872,
+      latitude: GlobalStore.latitude,
+      longitude: GlobalStore.longitute,
       error:null,
       loading: true,
     };
@@ -68,18 +70,15 @@ export default class HomePage extends Component{
           initialRegion={{
             latitude: this.state.latitude,
             longitude: this.state.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 1,
+            longitudeDelta: 1
         }}
         showUserLocation
         >
-         <MapView.Marker
-              showUserLocation
-              coordinate={{latitude: this.state.latitude,
-              longitude: this.state.longitude}}
-              title={"Konumunuz"}
-              description={"Bulunduğunuz konum!"}
-           />
+         {!!this.state.latitude && !!this.state.longitude && <MapView.Marker
+         coordinate={{"latitude":this.state.latitude,"longitude":this.state.longitude}}
+         title={"Your Location"}
+       />}
         </MapView>
       </View>
       );
