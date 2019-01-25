@@ -11,16 +11,11 @@ class Store {
     @observable name = '';
     @observable phone_number = '';
     @observable password = '';
-    
-    @observable urunler = {
-        urun1: {
-            fiyat: 10
-        },
-        urun2: {
-            fiyat: 20
-        }
-    };
+    @observable page = 'home'
 
+    cahangePage(text){
+        this.page = text;
+    }
 
     changeText(value){
         this.text2 = this.text

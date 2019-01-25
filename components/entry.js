@@ -4,6 +4,7 @@ import { observable, action } from "mobx";
 import { observer } from "mobx-react/native";
 import  GlobalStore  from './globalStore';
 import HomePage from './homePage';
+import BottomNavigation from '../screens/bottomNavigation';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 @observer class Entry extends Component{
@@ -162,7 +163,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
                     <TextInput placeholder = "Şifre" onChangeText = {(text) => this.changePassword(text)}></TextInput>
                 </View>
                 
-                <Button onPress = {() => this.props.navigation.navigate('HomePage')} title="Giriş Yap"></Button>
+                <Button onPress = {() => this.props.navigation.navigate('BottomNavigation')} title="Giriş Yap"></Button>
             </View>
           </View>
       

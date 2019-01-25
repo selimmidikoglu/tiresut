@@ -112,7 +112,7 @@ export default class HomePage extends Component{
         <View style= {{flex:5}}>{/*Map View*/}
           {this.renderMapView()}
         </View>
-        <View style={{flex:5,backgroundColor:'red',alignItems:'flex-start'}}>
+        <View style={{flex:5,backgroundColor:'#66bb6a',alignItems:'flex-start'}}>
         <ScrollView contentContainerStyle={{borderWidth:2,borderColor:'green',flexWrap:'wrap'}}>
         
           
