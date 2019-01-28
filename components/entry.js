@@ -28,18 +28,12 @@ var dimensions = {
   static navigationOptions = {
     header: null
   };
+  
+  
   componentDidMount(){
-    _retrieveData = async () => {
-        try {
-          const phone_number = await AsyncStorage.getItem('phone_number');
-          if (phone_number !== null) {
-            
-            console.log(phone_number);
-          }
-        } catch (error) {
-          // Error retrieving data
-        }
-      };
+    AsyncStorage.getItem('phone_number',(err,result) => {
+        console.log(result);
+    })
     navigator.geolocation.getCurrentPosition(
         (position) => {
             console.log(position);
@@ -131,13 +125,38 @@ var dimensions = {
             fetch('http://192.168.1.45:3000/customers/signup', {
             method: 'POST',
             headers: {
-                Accept: 'application/json',
+                Accept: 'application/json', 
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(userInfo),
           }).then(result => {
+              
+              
+              
               if(result.status == 201){
-                this.props.navigation.navigate('BottomNavigation')
+                var bodyInit = JSON.parse(result._bodyInit);
+                var type = bodyInit.result.type;
+                  AsyncStorage.setItem('phone_number',this.state.phone_number,(err)=>{
+                    if(err){
+                        console.log("olmadı yüklemedi")
+                    }
+                  });
+                  AsyncStorage.setItem('name',this.state.name,(err)=>{
+                    if(err){
+                        console.log("olmadı yüklemedi1")
+                    }
+                  });
+                     
+                  GlobalStore.name = this.state.name;
+                  GlobalStore.phone_number = this.state.phone_number;
+                  GlobalStore.password = this.state.password;
+                  console.log("name" + GlobalStore.name + "phone_number" + GlobalStore.phone_number + "password" + GlobalStore.password);
+                  if(type == 'user'){
+                    this.props.navigation.navigate('BottomNavigation')
+                  }
+                  else if( type == 'admin'){
+                    this.props.navigation.navigate('SecondPage')
+                  }
               }
               else if(result.status == 409){
                 Alert.alert(
@@ -158,7 +177,6 @@ var dimensions = {
             'Dikkat!',
             'Gerekli Yerleri Doldurun',
             [
-              {text: 'İptal Et', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
               {text: 'Tamam', onPress: () => console.log('OK Pressed')},
             ],
             { cancelable: false }
