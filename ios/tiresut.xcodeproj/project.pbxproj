@@ -56,6 +56,15 @@
 		AA62E9395A424FC08A5A81BB /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A058D4AE7494983B3A75849 /* Octicons.ttf */; };
 		9F41EC115FF942469D6F68DF /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7713C5FE87624FEC833CA6AA /* SimpleLineIcons.ttf */; };
 		1228DBA365B84F41B5E211EF /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 816D29B2589F45C298BBB75F /* Zocial.ttf */; };
+		23815EFA90BD45D49772E158 /* bahnschrift._semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78C2E0C650624A5EB355EE1E /* bahnschrift._semibold.ttf */; };
+		F3721F36C8E54C029F328409 /* Courgette-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4954A92BFBFF4112A2DE0BCB /* Courgette-Regular.ttf */; };
+		D67A1FE1877649CABEABB1A9 /* Aleo-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E80115F867A4B31AB9CFF67 /* Aleo-Bold.ttf */; };
+		465D8A4DD67943FF95032ADB /* Aleo-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5ACE7507EE524D099500D1BE /* Aleo-BoldItalic.ttf */; };
+		A4C4655BDA5C4A7484037980 /* Aleo-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 363F48F4D1224B019880FABD /* Aleo-Italic.ttf */; };
+		8A2C55014C3F465A8D7DFEEA /* Aleo-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 414EB936B76C4AC7BC20DC09 /* Aleo-Light.ttf */; };
+		FFD194D7EA0D459CBA2B4281 /* Aleo-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F603FC2CB1704B8D9C3B4B5D /* Aleo-LightItalic.ttf */; };
+		B451028CCE7746D68EBA6E26 /* Aleo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8EF54A9382E54DD0891086A1 /* Aleo-Regular.ttf */; };
+		B8215FFFE907412BBFAD78B5 /* ArbutusSlab-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD26574E70C4445F9D2823C1 /* ArbutusSlab-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -383,6 +392,15 @@
 		1A058D4AE7494983B3A75849 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		7713C5FE87624FEC833CA6AA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		816D29B2589F45C298BBB75F /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		78C2E0C650624A5EB355EE1E /* bahnschrift._semibold.ttf */ = {isa = PBXFileReference; name = "bahnschrift._semibold.ttf"; path = "../assets/fonts/bahnschrift._semibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4954A92BFBFF4112A2DE0BCB /* Courgette-Regular.ttf */ = {isa = PBXFileReference; name = "Courgette-Regular.ttf"; path = "../assets/fonts/Courgette-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0E80115F867A4B31AB9CFF67 /* Aleo-Bold.ttf */ = {isa = PBXFileReference; name = "Aleo-Bold.ttf"; path = "../assets/fonts/Aleo-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5ACE7507EE524D099500D1BE /* Aleo-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Aleo-BoldItalic.ttf"; path = "../assets/fonts/Aleo-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		363F48F4D1224B019880FABD /* Aleo-Italic.ttf */ = {isa = PBXFileReference; name = "Aleo-Italic.ttf"; path = "../assets/fonts/Aleo-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		414EB936B76C4AC7BC20DC09 /* Aleo-Light.ttf */ = {isa = PBXFileReference; name = "Aleo-Light.ttf"; path = "../assets/fonts/Aleo-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F603FC2CB1704B8D9C3B4B5D /* Aleo-LightItalic.ttf */ = {isa = PBXFileReference; name = "Aleo-LightItalic.ttf"; path = "../assets/fonts/Aleo-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8EF54A9382E54DD0891086A1 /* Aleo-Regular.ttf */ = {isa = PBXFileReference; name = "Aleo-Regular.ttf"; path = "../assets/fonts/Aleo-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BD26574E70C4445F9D2823C1 /* ArbutusSlab-Regular.ttf */ = {isa = PBXFileReference; name = "ArbutusSlab-Regular.ttf"; path = "../assets/fonts/ArbutusSlab-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -669,6 +687,15 @@
 				1A058D4AE7494983B3A75849 /* Octicons.ttf */,
 				7713C5FE87624FEC833CA6AA /* SimpleLineIcons.ttf */,
 				816D29B2589F45C298BBB75F /* Zocial.ttf */,
+				78C2E0C650624A5EB355EE1E /* bahnschrift._semibold.ttf */,
+				4954A92BFBFF4112A2DE0BCB /* Courgette-Regular.ttf */,
+				0E80115F867A4B31AB9CFF67 /* Aleo-Bold.ttf */,
+				5ACE7507EE524D099500D1BE /* Aleo-BoldItalic.ttf */,
+				363F48F4D1224B019880FABD /* Aleo-Italic.ttf */,
+				414EB936B76C4AC7BC20DC09 /* Aleo-Light.ttf */,
+				F603FC2CB1704B8D9C3B4B5D /* Aleo-LightItalic.ttf */,
+				8EF54A9382E54DD0891086A1 /* Aleo-Regular.ttf */,
+				BD26574E70C4445F9D2823C1 /* ArbutusSlab-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1135,6 +1162,15 @@
 				AA62E9395A424FC08A5A81BB /* Octicons.ttf in Resources */,
 				9F41EC115FF942469D6F68DF /* SimpleLineIcons.ttf in Resources */,
 				1228DBA365B84F41B5E211EF /* Zocial.ttf in Resources */,
+				23815EFA90BD45D49772E158 /* bahnschrift._semibold.ttf in Resources */,
+				F3721F36C8E54C029F328409 /* Courgette-Regular.ttf in Resources */,
+				D67A1FE1877649CABEABB1A9 /* Aleo-Bold.ttf in Resources */,
+				465D8A4DD67943FF95032ADB /* Aleo-BoldItalic.ttf in Resources */,
+				A4C4655BDA5C4A7484037980 /* Aleo-Italic.ttf in Resources */,
+				8A2C55014C3F465A8D7DFEEA /* Aleo-Light.ttf in Resources */,
+				FFD194D7EA0D459CBA2B4281 /* Aleo-LightItalic.ttf in Resources */,
+				B451028CCE7746D68EBA6E26 /* Aleo-Regular.ttf in Resources */,
+				B8215FFFE907412BBFAD78B5 /* ArbutusSlab-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
