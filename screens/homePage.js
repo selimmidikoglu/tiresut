@@ -1,13 +1,15 @@
-import React, {Component} from 'react';
+import React, {Component  } from 'react';
 import {Platform, Image,StyleSheet, Dimensions, Text, ScrollView,Button, TouchableOpacity, TouchableHighlight, TouchableNativeFeedback, View,ActivityIndicator} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 import  GlobalStore  from '../components/globalStore';
-import Icon from 'react-native-vector-icons/Ionicons';
+//import Icon from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'react-native-elements'
 import { observable, action } from "mobx";
 import { observer } from "mobx-react/native";
+import hostURL from '../hostURL';
 var dimensions ={
   height: Dimensions.get('window').height,
   width: Dimensions.get('window').width,
@@ -36,7 +38,7 @@ var currentProduct = []
     };
   }
   componentDidMount () {
-    fetch ('http://192.168.1.45:3000/products')
+    fetch (hostURL+'products')
       .then (response => response.json ())
       .then (responseJson => {
         this.setState ({products: responseJson});
@@ -79,11 +81,25 @@ var currentProduct = []
     return null;
    else{
     return(
-      <View style={{height:dimensions.height,width:dimensions.width,backgroundColor:'rgba(155, 233, 211, 0.1)',alignItems:'center',justifyContent:'center'}}>
-        <View style={{height:400,width:400,borderRadius:50,backgroundColor:'#a7ffeb'}}>
-          <Image style={{height:200,width:200}} source={{uri:this.state.product.imageUrl}}></Image>
-          <Button title = "Çık" onPress={()=>this.setState({productWindow:false})}/>
+      <View style={{height:'100%',width:'100%', backgroundColor:'green',alignItems:'flex-start',alignSelf:'center'}}>
+        <View style={{flex:4,borderRadius:50,alignItems:'center'}}>
+          <Image style={{height:75,width:75,borderRadius:50}} source={{uri:this.state.product.imageUrl}}></Image>
+          
         </View>
+        <View style={{flex:1,flexDirection:"row"}}>
+          <View style={{flex:3,backgroundColor:'powderblue'}}>
+          <Icon
+  reverse
+  name='ios-american-football'
+  type='ionicon'
+  color='#517fa4'
+/>
+            <Button title = "Çık" onPress={()=>this.setState({productWindow:false})}/>
+          </View>
+          <View style={{flex:4,backgroundColor:'blue'}}></View>
+          <View style={{flex:3,backgroundColor:'skyblue'}}></View>
+        </View>
+        
       </View>
     )
    } 
@@ -97,6 +113,7 @@ var currentProduct = []
     } else {
       return (
         <View style={styles.container}>
+          
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={styles.map1}
@@ -107,7 +124,7 @@ var currentProduct = []
               longitudeDelta: 0.09,
             }}
             showUserLocation
-          >
+          > 
             {!!this.state.latitude &&
               !!this.state.longitude &&
               <MapView.Marker
@@ -133,111 +150,97 @@ var currentProduct = []
         
           <View
             style={{
-              flex: 1,
+              flex: 5,
               borderRadius: 25,
               alignItems: 'center',
               justifyContent: 'center',
               //overflow: 'hidden',
             }}
           >
-          <TouchableHighlight onPress = {() => this.getProductForWindow(product)} >
-            <Image
-              style={{
-                height: dimensions.width / 2 - 50,
-                width: dimensions.width / 2 - 60,
-              }}
-              resizeMode="cover"
-              source={{uri: product.imageUrl}}
-            />
-            </TouchableHighlight>
+         
+            <View style={{height: dimensions.width / 2 - 60,width: dimensions.width / 2 - 30,borderRadius:30}}>
+              <TouchableOpacity onPress = {() => this.getProductForWindow(product)} >
+                <Image
+                  style={{
+                    borderRadius:30,
+                    height: dimensions.width / 2 - 60,
+                    width: dimensions.width / 2 - 30,
+                  }}
+                  resizeMode="cover"
+                  source={{uri: product.imageUrl}}
+                />
+              </TouchableOpacity>  
+            </View>  
+          
           </View>
-          <View style={{height:10,width:dimensions.width/2,justifyContent:'center',alignItems:'center'}}>
-            <Text  style={{color:'white', fontSize:14,fontWeight:'bold', textAlign:'center'}}>
+          <View style={{flex:1,width:dimensions.width/2,justifyContent:'center',alignItems:'center'}}>
+            <Text  style={{color:'white',fontFamily:'Courgette-Regular', fontSize:15, textAlign:'center'}}>
               {product.name}
             </Text>
+            <Text  style={{color:'white', fontSize:10,fontWeight:'bold', textAlign:'center'}}>
+              {product.price} TL.
+            </Text>
           </View>
+         
         
       </View>
     ));
     return productsView;
   }
-
-  render () {
-    return (
-      <View
-        style={{
-          flex: 1,
-          height: '100%',
-          width: '100%',
-          
-        }}
-      >
-        
-        <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'green'}}>
+  renderTopBar(){
+    return(
+      <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'green'}}>
           <View style={{flex: 3}} />{/*Top Bar Left Empty*/}
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
-          >
-          
-            <Image
-              resizeMode="cover"
-              style={{height: 50, width: 200}}
-              source={require ('../assets/images/inekbuyuk.png')}
-            />
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <Image resizeMode="cover" style={{height: 50, width: 200}} source={require ('../assets/images/inekbuyuk.png')}/>
           </View>
-          <View
-            style={{
-              flex: 3,
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}
-          >
+          <View style={{flex: 3,justifyContent: 'center',alignItems: 'center',flexDirection: 'row',marginRight: 10,}}>
             {/*Top Bar Right With Sepet*/}
-            <View style={{flex: 5}} />{/*Empty Right Space*/}
-            <View
-              style={{
-                flex: 1,
-                marginLeft: 10,
-                height: 15,
-                width: 15,
-                borderBottomColor: 'white',
-                borderBottomWidth: 0.9,
-                borderRadius: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text style={{fontSize: 9, color: 'white'}}>+1</Text>
-            </View>
+            <View style={{flex: 6}} />{/*Empty Right Space*/}
             <View style={{flex: 2}}>
               <Icon name="md-basket" size={30} color="white" />
+                <View style={{flex: 1,marginLeft: 10,height: 15,width: 15,backgroundColor:'red',
+                    borderRadius: 7.5,alignItems: 'center',justifyContent: 'center',position:'absolute',top:5,right:15}}>
+                <Text style={{fontSize: 9, color: 'white'}}>2</Text>
+                </View>
             </View>
+            
+            
 
           </View>
         </View>
-        <View style={{flex: 5}}>
-          {/*Map View*/}
+    )
+  }
+  render () {
+    return (
+      
+      <View style={{ flex: 1, height: '100%', width: '100%'}} >
+         
+        {this.renderTopBar()}
+        <View style={{flex: 3,alignItems:'center',justifyContent:'center'}}>{/*Map View*/}
           {this.renderMapView ()}
+          
         </View>
         <View
-          style={{flex: 5,backgroundColor:'green', alignItems: 'flex-start'}}
-        >
+          style={{flex: 5,backgroundColor:'green', alignItems: 'center',justifyContent:'center'}}
+        > 
+          {this.openProductWindow()}
           <ScrollView
             contentContainerStyle={{
               flexWrap: 'wrap',
               width:dimensions.width,
               height: dimensions.scrollheight,
+              
             }}
           >
-            {this.openProductWindow()}
             {this.renderProductsView ()}
 
           </ScrollView>
+          
         </View>
             
       </View>
+      
     );
   }
 }
@@ -245,13 +248,15 @@ var currentProduct = []
 const styles = StyleSheet.create ({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: 300,
+    //height: 300,
     width: dimensions.width,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    position:'absolute'
   },
   map1: {
     ...StyleSheet.absoluteFillObject,
+    
   },
   map: {
     position: 'absolute',

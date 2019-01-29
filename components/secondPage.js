@@ -26,7 +26,7 @@ constructor(props){
               <TextInput placeholder={GlobalStore.text} onChangeText={(text) => GlobalStore.changeText(text)}></TextInput>
             </View>
             <View style={{height:60,width:100,backgroundColor: 'cyan'}}>
-              <Button title="Birinci Sayfaya Git" onPress= {() => this.goToFirstPage()}></Button>
+              <Button title="Admin Sayfası" onPress= {() => this.goToFirstPage()}></Button>
             </View>
             
           </View>

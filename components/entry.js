@@ -7,12 +7,17 @@ import HomePage from './homePage';
 import BottomNavigation from '../screens/bottomNavigation';
 import SecondPage from './secondPage';
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import hostURL from '../hostURL';
 var DismissKeyboard = require('dismissKeyboard'); 
 var dimensions = {
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
 }
-
+var userInfo = {
+    phone_number: '',
+    name: '',
+    password: ''
+}
 @observer class Entry extends Component{
   constructor(props){
       super(props)
@@ -31,9 +36,6 @@ var dimensions = {
   
   
   componentDidMount(){
-    AsyncStorage.getItem('phone_number',(err,result) => {
-        console.log(result);
-    })
     navigator.geolocation.getCurrentPosition(
         (position) => {
             console.log(position);
@@ -44,6 +46,45 @@ var dimensions = {
         (error) => this.setState({ error: error.message }),
         { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 },
       );
+    AsyncStorage.multiGet(["name", "phone_number","password","type"],(err,result) => {
+
+        //Fetching data before app starts ffrom local storage
+        userInfo.name = result[0][1];
+        userInfo.phone_number = result[1][1];
+        userInfo.password = result[2][1];
+        userInfo.type = result[3][1];
+
+        console.log(userInfo.name + " " + userInfo.phone_number + " " + userInfo.password + " " +userInfo.type);
+        if(userInfo.phone_number != null && userInfo.password){
+            fetch(hostURL+'customers/login', {
+              method: 'POST',
+              headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(userInfo),
+            }).then(result => {
+                console.log(result);
+                if(result.status == 200){
+                    GlobalStore.phone_number=userInfo.phone_number;
+                    GlobalStore.name = userInfo.name;
+                    GlobalStore.password =userInfo.password;
+                    if(userInfo.type == 'user' || userInfo.type == null){
+                        this.props.navigation.navigate('BottomNavigation')
+                    }
+                    else if(type == 'admin'){
+                        this.props.navigation.navigate('SecondPage')
+                    }
+               }
+               else{
+
+               }
+            })
+            .catch(err => console.log(err));
+        }
+    })
+   
+    
     
   }
 
@@ -76,7 +117,7 @@ var dimensions = {
     if( this.state.phone_number != '' && this.state.password != '')
     {
         console.log("fetche girdi")
-          fetch('http://192.168.1.45:3000/customers/login', {
+          fetch(hostURL+'/customers/login', {
           method: 'POST',
           headers: {
               Accept: 'application/json',
@@ -122,7 +163,7 @@ var dimensions = {
       if(this.state.name != '' && this.state.phone_number != '' && this.state.password != '')
       {
           console.log("fetche girdi")
-            fetch('http://192.168.1.45:3000/customers/signup', {
+            fetch(hostURL+'/customers/signup', {
             method: 'POST',
             headers: {
                 Accept: 'application/json', 
@@ -136,14 +177,9 @@ var dimensions = {
               if(result.status == 201){
                 var bodyInit = JSON.parse(result._bodyInit);
                 var type = bodyInit.result.type;
-                  AsyncStorage.setItem('phone_number',this.state.phone_number,(err)=>{
+                  AsyncStorage.multiSet([['name',this.state.name],['phone_number',this.state.phone_number],['password',this.state.password],['type',type]],(err)=>{
                     if(err){
                         console.log("olmadı yüklemedi")
-                    }
-                  });
-                  AsyncStorage.setItem('name',this.state.name,(err)=>{
-                    if(err){
-                        console.log("olmadı yüklemedi1")
                     }
                   });
                      
