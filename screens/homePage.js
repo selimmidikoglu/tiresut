@@ -1,12 +1,12 @@
 import React, {Component  } from 'react';
-import {Platform, Image,StyleSheet, Dimensions, Text, ScrollView,Button, TouchableOpacity, TouchableHighlight, TouchableNativeFeedback, View,ActivityIndicator} from 'react-native';
+import {Platform, Image,StyleSheet, Dimensions,TextInput,Text, ScrollView,Button, TouchableOpacity, TouchableHighlight, TouchableNativeFeedback, View,ActivityIndicator} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { TabNavigator } from "react-navigation";
 import  GlobalStore  from '../components/globalStore';
-//import Icon from 'react-native-vector-icons/Ionicons';
-import { Icon } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/Ionicons';
+//import { Icon } from 'react-native-elements'
 import { observable, action } from "mobx";
 import { observer } from "mobx-react/native";
 import hostURL from '../hostURL';
@@ -71,8 +71,14 @@ var currentProduct = []
   }
  
   getProductForWindow(product){
+    GlobalStore.productToAdd._id = product._id;
+    GlobalStore.productToAdd.name = product.name;
+    GlobalStore.productToAdd.imageUrl = product.imageUrl;
+    GlobalStore.productToAdd.price = product.price;
+    GlobalStore.productToAdd.finalPrice = product.price;
+    console.log(product);
     this.setState({product:product});
-    console.log(this.state.product);
+    //console.log(this.state.product);
     this.setState({productWindow:true})
   }
   openProductWindow(){
@@ -81,23 +87,67 @@ var currentProduct = []
     return null;
    else{
     return(
-      <View style={{height:'100%',width:'100%', backgroundColor:'green',alignItems:'flex-start',alignSelf:'center'}}>
-        <View style={{flex:4,borderRadius:50,alignItems:'center'}}>
-          <Image style={{height:75,width:75,borderRadius:50}} source={{uri:this.state.product.imageUrl}}></Image>
+      <View style={{height:'100%',width:'100%', backgroundColor:'green',alignItems:'center',alignSelf:'center'}}>
+        <View style={{flex:4,alignItems:'center'}}>
+          <View style={{flex:4}}>
+            <Image style={{height:120,width:120,borderRadius:60,marginTop:10}} source={{uri:this.state.product.imageUrl}}/>
+            <Text  style={{fontFamily:'Courgette-Regular',textAlign:'center',marginTop:5,color:'white'}}>{this.state.product.name}</Text>
+          </View>
+          <View style={{flex:2,width:120,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+            <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>GlobalStore.decrementQuantity()}>
+                <View style={{width:50,height:50,alignItems:'center',justifyContent: 'center',}}><Icon name="md-remove" size={30} color='#F122A4'/></View>
+                
+              </TouchableOpacity>
+            </View>
+            <View style={{flex:2,alignItems:'center',justifyContent:'center'}}><Text style= {{color:'white',fontSize:20}}>{GlobalStore.productToAdd.quantity}</Text></View>  
+            <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>GlobalStore.incrementQuantity()}>
+                <View style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}><Icon name="md-add" size={30} color='#F122A4'/></View>
+                
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+            <Text style= {{color:'white',textAlign:'center',fontSize:20}}>{GlobalStore.productToAdd.finalPrice} TL.</Text>
+          </View>
           
         </View>
-        <View style={{flex:1,flexDirection:"row"}}>
-          <View style={{flex:3,backgroundColor:'powderblue'}}>
-          <Icon
-  reverse
-  name='ios-american-football'
-  type='ionicon'
-  color='#517fa4'
-/>
-            <Button title = "Çık" onPress={()=>this.setState({productWindow:false})}/>
+        <View style={{flex:1,flexDirection:"row"}}>{/*Product Escape Buttons*/}
+          <View style={{flex:3,flexDirection:'row',alignItems:'stretch',justifyContent:'flex-start'}}>
+            <TouchableOpacity style={{flex:1}} onPress={()=>this.setState({productWindow:false})}>
+              <View style={{flex:1, flexDirection:'row',alignItems:'stretch',justifyContent:'flex-start'}}>
+                <View style={{flex:1,alignItems:'flex-start',justifyContent:'center'}}>
+                  <Icon name="md-arrow-round-back"  size={20} color="white" />
+                </View>
+                <View style={{flex:4,alignItems:'flex-start',justifyContent:'center'}}>
+                  <Text style={{color:'white',fontSize:15}}>Ürünlere Dön</Text>
+                </View>
+              </View>
+            </TouchableOpacity> 
           </View>
-          <View style={{flex:4,backgroundColor:'blue'}}></View>
-          <View style={{flex:3,backgroundColor:'skyblue'}}></View>
+          <View style={{flex:4,alignItems:'center',justifyContent:'center'}}>
+            <TouchableOpacity onPress={()=>{
+              GlobalStore.addProductToBasket(GlobalStore.productToAdd);
+              console.log(GlobalStore.products[GlobalStore.counter]);
+              this.setState({productWindow:false});
+              
+            }}>
+              <Text style={{color:'#5A3C1A',fontSize:15}}>Sepete Ekle</Text>
+              <Icon name="md-add-circle-outline" style= {{alignSelf:'center'}} size={20} color='#F12222'/>
+            </TouchableOpacity>
+            
+          </View>
+          <View style={{flex:3,flexDirection:'row',alignItems:'stretch',justifyContent:'flex-end'}}>
+              <View style={{flex:4,alignItems:'flex-end',justifyContent:'center'}}>
+                <Text style={{color:'white',fontSize:15}}>Sepete Git</Text>
+              </View>
+              <View style={{flex:1,width: 10,alignItems:'flex-end',justifyContent:'center'}}>
+                <TouchableOpacity onPress={()=>this.setState({productWindow:false})}>
+                    <Icon name="md-arrow-round-forward"  size={20} color="white" />
+                </TouchableOpacity>
+              </View> 
+          </View>
         </View>
         
       </View>
@@ -192,7 +242,7 @@ var currentProduct = []
       <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'green'}}>
           <View style={{flex: 3}} />{/*Top Bar Left Empty*/}
           <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Image resizeMode="cover" style={{height: 50, width: 200}} source={require ('../assets/images/inekbuyuk.png')}/>
+            <Image resizeMode="cover" style={{height: 90, width: 90}} source={require ('../assets/images/inekbuyuk.png')}/>
           </View>
           <View style={{flex: 3,justifyContent: 'center',alignItems: 'center',flexDirection: 'row',marginRight: 10,}}>
             {/*Top Bar Right With Sepet*/}
