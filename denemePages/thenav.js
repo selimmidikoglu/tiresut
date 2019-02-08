@@ -5,25 +5,23 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { createAppContainer,createBottomTabNavigator } from "react-navigation";
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 
-import HomePage from './homePage';
-import OrdersPage from './ordersPage';
-import ProfilePage from './profilePage';
-import AdressesPage from './adressesPage';
-//dimensions
+import FirstPage from './first';
+import SecondPage from './second';
+import ThirdPage from './third';
 
-import design from '../constants/dimensions';
-const RootStack = createMaterialBottomTabNavigator({
 
-    HomePage: {
-        screen: HomePage,
+const RootStack = createBottomTabNavigator({
+
+    FirstPage: {
+        screen: FirstPage,
         navigationOptions:{
             tabBarLabel:'Ürünler',
             tabBarIcon:({tintColor}) => (
-            <Icon name="ios-home" size={27} color="white"/>
+            <Icon name="ios-home" size={27} color="black"/>
             )
         }
     },
-    OrdersPage: {screen: OrdersPage,
+    SecondPage: {screen: SecondPage,
         navigationOptions:{
             tabBarLabel:'Siparişler',
             tabBarIcon:({tintColor}) => (
@@ -31,7 +29,7 @@ const RootStack = createMaterialBottomTabNavigator({
             )
         }
     },
-    ProfilePage: {screen: ProfilePage,
+    ThirdPage: {screen: ThirdPage,
         navigationOptions:{
             tabBarLabel:'Profil',
             tabBarIcon:({tintColor}) => (
@@ -39,27 +37,20 @@ const RootStack = createMaterialBottomTabNavigator({
             )
         }
     },
-    AdressesPage: {screen: AdressesPage,
-        navigationOptions:{
-            tabBarLabel:'Adresler',
-            tabBarIcon:({tintColor}) => (
-            <Icon name="ios-pin" size={27} color="white"/>
-            )
-        }
-    }
+   
 },
 {
-    initialRouteName: 'HomePage',
+    /*initialRouteName: 'HomePage',
     order:['HomePage','AdressesPage','OrdersPage','ProfilePage'],
     activeTintColor: 'white',
     inactiveColor: 'white',
-    barStyle: {backgroundColor: '#f50057',height: design.navBarHeight},
+    barStyle: { backgroundColor: '#f50057' },*/
   }
 )
  
-const BottomNavigation = createAppContainer(RootStack);
+const TheNav = createAppContainer(RootStack);
 
-export default BottomNavigation;
+export default TheNav;
     
 
 

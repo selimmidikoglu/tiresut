@@ -4,10 +4,12 @@ import { observable, action } from "mobx";
 import { observer } from "mobx-react/native";
 import  GlobalStore  from './globalStore';
 import HomePage from './homePage';
-import BottomNavigation from '../screens/bottomNavigation';
+import TheNav from '../denemePages/thenav';
+//import BottomNavigation from '../screens/bottomNavigation';
 import SecondPage from './secondPage';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import hostURL from '../hostURL';
+import TabBarEncapSulator from '../screens/tabbarencapsulator';
 var DismissKeyboard = require('dismissKeyboard'); 
 var dimensions = {
     height: Dimensions.get('window').height,
@@ -30,32 +32,32 @@ var userInfo = {
       }
       
   }
-  static navigationOptions = {
+  /*static navigationOptions = {
     header: null
-  };
+  };*/
   
   
   componentDidMount(){
     navigator.geolocation.getCurrentPosition(
         (position) => {
-            console.log(position);
+            console.log("Haydar" + position);
             GlobalStore.changeCoordinates(position.coords.latitude,position.coords.longitude);
             error: null;
           
         },
         (error) => this.setState({ error: error.message }),
-        { enableHighAccuracy: true, timeout: 200000, maximumAge: 1000 },
+        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
       );
     AsyncStorage.multiGet(["name", "phone_number","password","type"],(err,result) => {
 
-        //Fetching data before app starts ffrom local storage
+        //Fetching data before app starts from local storage
         userInfo.name = result[0][1];
         userInfo.phone_number = result[1][1];
         userInfo.password = result[2][1];
         userInfo.type = result[3][1];
 
         console.log(userInfo.name + " " + userInfo.phone_number + " " + userInfo.password + " " +userInfo.type);
-        if(userInfo.phone_number != null && userInfo.password){
+        if(userInfo.phone_number != null && userInfo.password != null){
             fetch(hostURL+'customers/login', {
               method: 'POST',
               headers: {
@@ -64,13 +66,14 @@ var userInfo = {
               },
               body: JSON.stringify(userInfo),
             }).then(result => {
+                console.log
                 console.log(result);
                 if(result.status == 200){
                     GlobalStore.phone_number=userInfo.phone_number;
                     GlobalStore.name = userInfo.name;
                     GlobalStore.password =userInfo.password;
                     if(userInfo.type == 'user' || userInfo.type == null){
-                        this.props.navigation.navigate('BottomNavigation')
+                        this.setState({signUpOrLogin:'goToBottomNav'})
                     }
                     else if(type == 'admin'){
                         this.props.navigation.navigate('SecondPage')
@@ -117,14 +120,14 @@ var userInfo = {
     if( this.state.phone_number != '' && this.state.password != '')
     {
         console.log("fetche girdi")
-          fetch(hostURL+'/customers/login', {
+          fetch(hostURL+'customers/login', {
           method: 'POST',
           headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
           },
           body: JSON.stringify(userInfo),
-        }).then(result => console.log(result ))
+        }).then(result => console.log("Haydar geldi data" + result))
         .catch(err => console.log(err));
     }
     else{
@@ -141,6 +144,7 @@ var userInfo = {
     }
   }
   signUp(){
+    this.props.navigation.navigate('BottomNavigation');
       let userInfo = {};
       userInfo.name = this.state.name;
       userInfo.phone_number = this.state.phone_number;
@@ -163,7 +167,7 @@ var userInfo = {
       if(this.state.name != '' && this.state.phone_number != '' && this.state.password != '')
       {
           console.log("fetche girdi")
-            fetch(hostURL+'/customers/signup', {
+            fetch(hostURL+'customers/signup', {
             method: 'POST',
             headers: {
                 Accept: 'application/json', 
@@ -289,7 +293,7 @@ var userInfo = {
             </View>
         );
       }
-      else{
+      else if(this.state.signUpOrLogin == 'login'){
           return (
             <View style={{flex:1}}>
                 <View style = {{flex:3,alignItems:'center',justifyContent:'center'}}>
@@ -337,6 +341,13 @@ var userInfo = {
             </View>
           )
       }
+      else if(this.state.signUpOrLogin == 'goToBottomNav'){
+        return (
+          
+          <TabBarEncapSulator/>
+          
+        )
+    }
   } 
   render() {
      

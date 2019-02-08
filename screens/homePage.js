@@ -15,7 +15,7 @@ var dimensions ={
   width: Dimensions.get('window').width,
   scrollheight: 0
 }
-var currentProduct = []
+
 @observer class HomePage extends Component {
   static navigationOptions = {
     header: null,
@@ -30,6 +30,7 @@ var currentProduct = []
       error: null,
       loading: true,
       productWindow: false,
+      basketWindow : false,
       product: [],
       productName:'',
       productId: '',
@@ -42,9 +43,8 @@ var currentProduct = []
       .then (response => response.json ())
       .then (responseJson => {
         this.setState ({products: responseJson});
-        console.log (this.state.products);
         if(this.state.products.length%2 == 0){
-            dimensions.scrollheight = this.state.products.length/2*dimensions.width/2
+            dimensions.scrollheight = this.state.products.length/2*dimensions.width/2 + 10
         }
         else{
             dimensions.scrollheight = ((this.state.products.length/2) + 1)* dimensions.width/2
@@ -69,20 +69,21 @@ var currentProduct = []
       })
       .catch (error => console.warn (error));
   }
- 
+  //getBasketWindow()
+  //Opens a single product window for to choose quantity of products than adds values to GlobalStore
   getProductForWindow(product){
     GlobalStore.productToAdd._id = product._id;
     GlobalStore.productToAdd.name = product.name;
     GlobalStore.productToAdd.imageUrl = product.imageUrl;
     GlobalStore.productToAdd.price = product.price;
     GlobalStore.productToAdd.finalPrice = product.price;
-    console.log(product);
+    
     this.setState({product:product});
     //console.log(this.state.product);
     this.setState({productWindow:true})
   }
   openProductWindow(){
-    //this.setState({product:[...this.state.product,product]});
+    
    if(this.state.productWindow == false)
     return null;
    else{
@@ -129,7 +130,7 @@ var currentProduct = []
           <View style={{flex:4,alignItems:'center',justifyContent:'center'}}>
             <TouchableOpacity onPress={()=>{
               GlobalStore.addProductToBasket(GlobalStore.productToAdd);
-              console.log(GlobalStore.products[GlobalStore.counter]);
+              console.log(GlobalStore.products[0]);
               this.setState({productWindow:false});
               
             }}>
@@ -139,15 +140,20 @@ var currentProduct = []
             
           </View>
           <View style={{flex:3,flexDirection:'row',alignItems:'stretch',justifyContent:'flex-end'}}>
+            <TouchableOpacity  style={{flex:1}} onPress={()=>GlobalStore.changeBetweenBasketOrBottomNav()}>
+            <View style={{flex:3,flexDirection:'row',alignItems:'stretch',justifyContent:'flex-end'}}>
               <View style={{flex:4,alignItems:'flex-end',justifyContent:'center'}}>
                 <Text style={{color:'white',fontSize:15}}>Sepete Git</Text>
               </View>
               <View style={{flex:1,width: 10,alignItems:'flex-end',justifyContent:'center'}}>
-                <TouchableOpacity onPress={()=>this.setState({productWindow:false})}>
+               
                     <Icon name="md-arrow-round-forward"  size={20} color="white" />
-                </TouchableOpacity>
-              </View> 
+                
+              </View>
+            </View>
+            </TouchableOpacity> 
           </View>
+          
         </View>
         
       </View>
@@ -182,7 +188,7 @@ var currentProduct = []
                   latitude: this.state.latitude,
                   longitude: this.state.longitude,
                 }}
-                title={'Your Location'}
+                title={'Şu anki konumunuz'}
               />}
           </MapView>
         </View>
@@ -237,36 +243,12 @@ var currentProduct = []
     ));
     return productsView;
   }
-  renderTopBar(){
-    return(
-      <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'green'}}>
-          <View style={{flex: 3}} />{/*Top Bar Left Empty*/}
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Image resizeMode="cover" style={{height: 90, width: 90}} source={require ('../assets/images/inekbuyuk.png')}/>
-          </View>
-          <View style={{flex: 3,justifyContent: 'center',alignItems: 'center',flexDirection: 'row',marginRight: 10,}}>
-            {/*Top Bar Right With Sepet*/}
-            <View style={{flex: 6}} />{/*Empty Right Space*/}
-            <View style={{flex: 2}}>
-              <Icon name="md-basket" size={30} color="white" />
-                <View style={{flex: 1,marginLeft: 10,height: 15,width: 15,backgroundColor:'red',
-                    borderRadius: 7.5,alignItems: 'center',justifyContent: 'center',position:'absolute',top:5,right:15}}>
-                <Text style={{fontSize: 9, color: 'white'}}>2</Text>
-                </View>
-            </View>
-            
-            
 
-          </View>
-        </View>
-    )
-  }
+
   render () {
     return (
       
       <View style={{ flex: 1, height: '100%', width: '100%'}} >
-         
-        {this.renderTopBar()}
         <View style={{flex: 3,alignItems:'center',justifyContent:'center'}}>{/*Map View*/}
           {this.renderMapView ()}
           

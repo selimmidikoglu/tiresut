@@ -1,9 +1,10 @@
 import {
-    observable,
+    observable,action,autorun, toJS
 } from 'mobx';
 
 class Store {
-    @observable products = [];
+    @observable basketOrBottomNav = false;
+    @observable products = {count: 0,productsAdded : []};
     @observable counter = 0;
     @observable latitude = 0.0;
     @observable longitute = 0.0;
@@ -14,17 +15,34 @@ class Store {
     @observable password = '';
     @observable page = 'home'
     @observable productToAdd = {_id: '', name: '', imageUrl: '', price: 0.0 , finalPrice: 0.0, quantity: 1 }
-    cahangePage(text){
-        this.page = text;
+    @observable clone = [];
+    removeProduct(name){
+        for (let i = 0; i < this.clone.length; i++) {
+            if(this.clone[i].name == name){
+                console.log("Bu isim siliniyor" + name);
+                this.clone.splice(i,1);
+            }
+            
+        }
+        
     }
-    addProductToBasket(productToAdd){
-        this.products[this.counter] = productToAdd;
-        console.log(productToAdd);
+    @action addProductToBasket(productToAdd){
+        
         this.counter = this.counter + 1;
+        console.log("Sayıyor amk kodum cocugu " + this.counter);
+        this.products.productsAdded.push(productToAdd);
+        this.clone = toJS(this.products.productsAdded);
+        
+        console.log("Clone u bastırdım" + JSON.stringify(this.clone));
+        this.productToAdd = {_id: '', name: '', imageUrl: '', price: 0.0 , finalPrice: 0.0, quantity: 1 };
     }
-    changeText(value){
-        this.text2 = this.text
-        this.text = value;
+    changeBetweenBasketOrBottomNav(){
+        if(this.basketOrBottomNav){
+            this.basketOrBottomNav = false;
+        }
+        else{
+            this.basketOrBottomNav = true;
+        }
     }
     changeCoordinates(lat,lon){
         this.latitude = lat;
