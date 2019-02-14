@@ -8,7 +8,7 @@ import {Platform, Image,StyleSheet, Dimensions,TextInput,Text, ScrollView,Button
     return (
       
       <View style={{ flex: 1}} >
-        <Text>1</Text>
+        <Button title="Go to second" onPress={()=>this.props.navigation.navigate('SecondPage')}></Button>
             
       </View>
       

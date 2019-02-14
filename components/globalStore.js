@@ -3,7 +3,9 @@ import {
 } from 'mobx';
 
 class Store {
-    @observable basketOrBottomNav = false;
+    
+    //variable to keep the total price of the basket
+    @observable totalPrice = 0;
     @observable products = {count: 0,productsAdded : []};
     @observable counter = 0;
     @observable latitude = 0.0;
@@ -15,25 +17,59 @@ class Store {
     @observable password = '';
     @observable page = 'home'
     @observable productToAdd = {_id: '', name: '', imageUrl: '', price: 0.0 , finalPrice: 0.0, quantity: 1 }
+    @observable addressOption = '';
     @observable clone = [];
+    @observable adresses = [];
+    changeAdressOption(title){
+        this.addressOption = title;
+    }
+    addAdresses(adresses){
+        for (let i = 0; i < adresses.length; i++) {
+            const element = adresses[i];
+            this.adresses.push(element);
+        }
+    }
     removeProduct(name){
         for (let i = 0; i < this.clone.length; i++) {
             if(this.clone[i].name == name){
                 console.log("Bu isim siliniyor" + name);
+                this.totalPrice -= this.clone[i].finalPrice;
                 this.clone.splice(i,1);
+                this.products.count = this.products.count - 1;
             }
             
         }
+        console.log("Clone un son hali " + JSON.stringify(this.clone));
+     
         
     }
-    @action addProductToBasket(productToAdd){
-        
-        this.counter = this.counter + 1;
-        console.log("Sayıyor amk kodum cocugu " + this.counter);
-        this.products.productsAdded.push(productToAdd);
-        this.clone = toJS(this.products.productsAdded);
-        
-        console.log("Clone u bastırdım" + JSON.stringify(this.clone));
+    addProductToBasket(productToAdd){
+        console.log("Eklenilecek ürün " + productToAdd)
+        let addNew = true;
+        let index = 0;
+        for (let i = 0; i < this.clone.length; i++) {
+            const element = this.clone[i];
+            if(element.name == productToAdd.name){
+                index = i;
+                addNew = false;
+            }
+            
+        }
+        if(addNew){
+            this.clone.push(productToAdd);
+            this.products.count = this.products.count + 1;
+            console.log("Yeni eklendi");
+            console.log(JSON.stringify(this.clone));
+            this.totalPrice += productToAdd.finalPrice;
+        } else {
+            this.totalPrice -= this.clone[index].finalPrice
+            this.clone[index].quantity = this.clone[index].quantity + productToAdd.quantity;
+            this.clone[index].finalPrice = this.clone[index].quantity * this.clone[index].price;
+            console.log("Üzerine eklendi");
+            console.log(JSON.stringify(this.clone));
+            this.totalPrice += this.clone[index].finalPrice;
+        }
+     
         this.productToAdd = {_id: '', name: '', imageUrl: '', price: 0.0 , finalPrice: 0.0, quantity: 1 };
     }
     changeBetweenBasketOrBottomNav(){

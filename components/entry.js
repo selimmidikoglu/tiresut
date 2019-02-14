@@ -8,8 +8,9 @@ import TheNav from '../denemePages/thenav';
 //import BottomNavigation from '../screens/bottomNavigation';
 import SecondPage from './secondPage';
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import hostURL from '../hostURL';
-import TabBarEncapSulator from '../screens/tabbarencapsulator';
+import hostURL from '../constants/hostURL';
+
+import BottomNavigation from '../screens/bottomNavigation';
 var DismissKeyboard = require('dismissKeyboard'); 
 var dimensions = {
     height: Dimensions.get('window').height,
@@ -29,6 +30,7 @@ var userInfo = {
         infoTextColor: ['#040B10','#040B10','#040B10'],
         textInputLineColors: ['black','black','black'],
         signUpOrLogin : 'login'
+        //waitForGeolocationAndAuthentication:
       }
       
   }
@@ -38,24 +40,31 @@ var userInfo = {
   
   
   componentDidMount(){
+      
     navigator.geolocation.getCurrentPosition(
         (position) => {
-            console.log("Haydar" + position);
+            
+
             GlobalStore.changeCoordinates(position.coords.latitude,position.coords.longitude);
+            console.log("Global latitude " + GlobalStore.latitude + "Global longitude "+ GlobalStore.longitute );
             error: null;
-          
+            
         },
         (error) => this.setState({ error: error.message }),
-        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+        { enableHighAccuracy: true, timeout: 5000000, maximumAge: 1000 },
+        
       );
     AsyncStorage.multiGet(["name", "phone_number","password","type"],(err,result) => {
 
         //Fetching data before app starts from local storage
-        userInfo.name = result[0][1];
+        /*userInfo.name = result[0][1];
         userInfo.phone_number = result[1][1];
         userInfo.password = result[2][1];
-        userInfo.type = result[3][1];
-
+        userInfo.type = result[3][1];*/
+        userInfo.name = "İdris"
+        userInfo.phone_number = "4567891524"
+        userInfo.password = "Bb1.naber"
+        userInfo.type = "user"
         console.log(userInfo.name + " " + userInfo.phone_number + " " + userInfo.password + " " +userInfo.type);
         if(userInfo.phone_number != null && userInfo.password != null){
             fetch(hostURL+'customers/login', {
@@ -66,12 +75,14 @@ var userInfo = {
               },
               body: JSON.stringify(userInfo),
             }).then(result => {
-                console.log
                 console.log(result);
                 if(result.status == 200){
                     GlobalStore.phone_number=userInfo.phone_number;
                     GlobalStore.name = userInfo.name;
                     GlobalStore.password =userInfo.password;
+                    var bodyInit = JSON.parse(result._bodyInit);
+                    console.log(bodyInit.result.adresses);
+                    GlobalStore.addAdresses(bodyInit.result.adresses);
                     if(userInfo.type == 'user' || userInfo.type == null){
                         this.setState({signUpOrLogin:'goToBottomNav'})
                     }
@@ -144,7 +155,7 @@ var userInfo = {
     }
   }
   signUp(){
-    this.props.navigation.navigate('BottomNavigation');
+    //this.props.navigation.navigate('BottomNavigation');
       let userInfo = {};
       userInfo.name = this.state.name;
       userInfo.phone_number = this.state.phone_number;
@@ -344,7 +355,7 @@ var userInfo = {
       else if(this.state.signUpOrLogin == 'goToBottomNav'){
         return (
           
-          <TabBarEncapSulator/>
+          <BottomNavigation/>
           
         )
     }

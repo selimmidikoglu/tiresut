@@ -9,6 +9,13 @@ var design = {
     productViewHeight : height * 7 / 14,
     navBarHeight : height*1/14,
     basketHeight: height*12/14,
+    adressSelectPage: {
+        map : height*5/14,
+        adresses:height*5/14,
+        orderType : height*2/14,
+        giveOrder : height*1/14,
+    }
+
 }
 
 export default design;

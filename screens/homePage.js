@@ -1,4 +1,4 @@
-import React, {Component  } from 'react';
+import React, {Component,PureComponent  } from 'react';
 import {Platform, Image,StyleSheet, Dimensions,TextInput,Text, ScrollView,Button, TouchableOpacity, TouchableHighlight, TouchableNativeFeedback, View,ActivityIndicator} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
@@ -9,13 +9,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 //import { Icon } from 'react-native-elements'
 import { observable, action } from "mobx";
 import { observer } from "mobx-react/native";
-import hostURL from '../hostURL';
+import hostURL from '../constants/hostURL';
+import design from '../constants/dimensions';
 var dimensions ={
   height: Dimensions.get('window').height,
   width: Dimensions.get('window').width,
   scrollheight: 0
 }
-
+var location = {
+  lat: 0,
+  lng:0
+};
 @observer class HomePage extends Component {
   static navigationOptions = {
     header: null,
@@ -28,7 +32,8 @@ var dimensions ={
       latitude: GlobalStore.latitude,
       longitude: GlobalStore.longitute,
       error: null,
-      loading: true,
+      loadingMap: true,
+      loadingProducts: true,
       productWindow: false,
       basketWindow : false,
       product: [],
@@ -38,31 +43,37 @@ var dimensions ={
       imageUrl: '',
     };
   }
+
   componentDidMount () {
     fetch (hostURL+'products')
       .then (response => response.json ())
       .then (responseJson => {
         this.setState ({products: responseJson});
+        this.setState({loadingProducts:false});
         if(this.state.products.length%2 == 0){
             dimensions.scrollheight = this.state.products.length/2*dimensions.width/2 + 10
         }
         else{
             dimensions.scrollheight = ((this.state.products.length/2) + 1)* dimensions.width/2
         }
-        this.setState ({loading: false});
+        
       })
       .catch (error => {
         console.error (error);
       });
     Geocoder.init ('AIzaSyCyG67U79Ez16ov4XcDofAociXdDxIsOL8'); // use a valid API key
-    Geocoder.from ('Erzene Mahallesi')
+    Geocoder.from ('Evka 3 Metro, Erzene Mahallesi, Bornova/İzmir, Turkey')
       .then (json => {
-        var location = json.results[0].geometry.location;
-        console.log ('Lokasyon adından' + json.results);
+        location.lat = json.results[0].geometry.location.lat;
+        
+        location.lng = json.results[0].geometry.location.lng;
+        this.setState({latitude:location.lat,longitude:location.lng});
+        this.setState ({loadingMap: false});
+        console.log (json.results[0].geometry);
       })
       .catch (error => console.warn (error));
 
-    Geocoder.from (38.46549058, 27.22578868)
+    Geocoder.from (38.4649109, 27.2285737)
       .then (json => {
         var addressComponent = json; //s[0].address_components[0];
         console.log (addressComponent);
@@ -159,12 +170,43 @@ var dimensions ={
       </View>
     )
    } 
-
-    
-
+  }
+  renderBasketNumber(){
+    if(GlobalStore.products.count == 0){
+      return null;
+    }
+    else{
+      return(
+        <View style={{flex: 1,marginLeft: 10,height: 15,width: 15,backgroundColor:'red',
+                        borderRadius: 7.5,alignItems: 'center',justifyContent: 'center',position:'absolute',top:5,right:15}}>
+          <Text style={{fontSize: 9, color: 'white'}}>{GlobalStore.products.count}</Text>
+        </View>
+      );
+    }
+  }
+  renderTopBar(){
+    return(
+      <View style={{height:design.tabBarHeight, flexDirection: 'row', backgroundColor: 'green'}}>
+          <View style={{flex: 3}} />{/*Top Bar Left Empty*/}
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <Image resizeMode="cover" style={{height: 90, width: 90}} source={require ('../assets/images/inekbuyuk.png')}/>
+          </View>
+          <View style={{flex: 3,justifyContent: 'center',alignItems: 'center',flexDirection: 'row',marginRight: 10}}>
+            {/*Top Bar Right With Sepet*/}
+            <View style={{flex: 6}} />{/*Empty Right Space*/}
+            
+              <View style={{flex: 2,alignItems:'center',justifyContent:'center'}}>
+                <TouchableOpacity onPress = {()=> this.props.navigation.navigate('Basket')}>
+                  <Icon name="md-basket" size={30} color="white" />
+                    {this.renderBasketNumber()}
+                </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+    )
   }
   renderMapView () {
-    if (this.state.loading) {
+    if (this.state.loadingMap) {
       return <ActivityIndicator size="large" color="yellow" />;
     } else {
       return (
@@ -174,8 +216,8 @@ var dimensions ={
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={styles.map1}
             initialRegion={{
-              latitude: this.state.latitude,
-              longitude: this.state.longitude,
+              latitude: 38.46715,
+              longitude: 27.227499,
               latitudeDelta: 0.09,
               longitudeDelta: 0.09,
             }}
@@ -197,8 +239,11 @@ var dimensions ={
   }
   
   renderProductsView () {
-    let productsView = [];
-    productsView = this.state.products.map (product => (
+    if (this.state.loadingProducts) {
+      return <ActivityIndicator size="large" color="yellow" />;
+    }else{
+      let productsView = [];
+      productsView = this.state.products.map (product => (
       <View
         key={product.name}
         style={{height: dimensions.width/2,alignItems:'center',justifyContent:'center'}}
@@ -242,6 +287,8 @@ var dimensions ={
       </View>
     ));
     return productsView;
+    }
+    
   }
 
 
@@ -249,6 +296,7 @@ var dimensions ={
     return (
       
       <View style={{ flex: 1, height: '100%', width: '100%'}} >
+        {this.renderTopBar()}
         <View style={{flex: 3,alignItems:'center',justifyContent:'center'}}>{/*Map View*/}
           {this.renderMapView ()}
           

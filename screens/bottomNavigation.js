@@ -5,17 +5,18 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { createAppContainer,createBottomTabNavigator } from "react-navigation";
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 
-import HomePage from './homePage';
+import HomePageContainer from '../routes/homePageContainer';
 import OrdersPage from './ordersPage';
 import ProfilePage from './profilePage';
 import AdressesPage from './adressesPage';
+
 //dimensions
 
 import design from '../constants/dimensions';
 const RootStack = createMaterialBottomTabNavigator({
-
-    HomePage: {
-        screen: HomePage,
+    
+    HomePageContainer: {
+        screen: HomePageContainer,
         navigationOptions:{
             tabBarLabel:'Ürünler',
             tabBarIcon:({tintColor}) => (
@@ -49,11 +50,12 @@ const RootStack = createMaterialBottomTabNavigator({
     }
 },
 {
-    initialRouteName: 'HomePage',
-    order:['HomePage','AdressesPage','OrdersPage','ProfilePage'],
-    activeTintColor: 'white',
+    initialRouteName: 'HomePageContainer',
+    order:['HomePageContainer','AdressesPage','OrdersPage','ProfilePage'],
+    activeColor: '#e65100',
+    activeTintColor: '#e65100',
     inactiveColor: 'white',
-    barStyle: {backgroundColor: '#f50057',height: design.navBarHeight},
+    barStyle: {backgroundColor: '#4b2c20',height: design.navBarHeight},
   }
 )
  
